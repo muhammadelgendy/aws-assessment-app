@@ -1,0 +1,14 @@
+[build]
+  publish = "app/static"
+  command = "echo 'No build required'"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://zaintech-war-backend.loca.lt/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="Cache-Control" content="no-store" />
+<meta http-equiv="Pragma" content="no-cache" />
+<title>zaintech_war</title>
+<style>
+  :root {
+    --bg: #f0f6ff;
+    --surface: #ffffff;
+    --panel: #f7fbff;
+    --border: rgba(28, 78, 164, 0.12);
+    --text: #102240;
+    --muted: #556b84;
+    --accent: #1f58bc;
+    --accent-soft: #dde8ff;
+    --success: #0c8f66;
+    --warning: #d97a1e;
+    --danger: #c82f3a;
+    --shadow: 0 28px 80px rgba(31, 88, 188, 0.08);
+    --card-surface: rgba(255,255,255,0.92);
+    --hero-glow: rgba(255,255,255,0.16);
+  }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: radial-gradient(circle at top left, rgba(31, 88, 188, 0.12), transparent 35%),
+                linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+    color: var(--text);
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  body.dark {
+    background: #081127;
+    color: #e7efff;
+  }
+  body.dark .page {
+    color: #f0f6ff;
+  }
+  body.dark .panel,
+  body.dark .summary-card,
+  body.dark .report-card {
+    background: #07101f;
+    border-color: rgba(255,255,255,0.12);
+    box-shadow: 0 14px 32px rgba(0,0,0,0.22);
+  }
+  body.dark .summary-card {
+    background: #081428;
+  }
+  body.dark .hero {
+    background: linear-gradient(135deg, #0f2b57 0%, #16386b 100%);
+  }
+  body.dark .brand-chip {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.12);
+  }
+  body.dark .panel.new-scan-panel {
+    background: linear-gradient(180deg, rgba(13, 27, 51, 0.92) 0%, rgba(18, 37, 69, 0.92) 100%);
+    border-color: rgba(255,255,255,0.12);
+  }
+  body.dark .panel-heading-icon {
+    background: rgba(255,255,255,0.08);
+    color: #c8dcff;
+    box-shadow: inset 0 2px 8px rgba(255,255,255,0.08);
+  }
+  body.dark .form-status {
+    background: rgba(255,255,255,0.06);
+    color: #dbe7ff;
+  }
+  body.dark input,
+  body.dark select,
+  body.dark .search-input {
+    background: #112033;
+    border-color: rgba(255,255,255,0.12);
+    color: #edf5ff;
+  }
+  body.dark input::placeholder,
+  body.dark select::placeholder,
+  body.dark .search-input::placeholder {
+    color: rgba(255, 255, 255, 0.55);
+  }
+  body.dark .button-primary,
+  body.dark .download-btn {
+    box-shadow: 0 14px 30px rgba(0,0,0,0.28);
+  }
+  body.dark .summary-title,
+  body.dark .report-detail,
+  body.dark .report-meta span,
+  body.dark .hint,
+  body.dark .report-note,
+  body.dark .progress-task,
+  body.dark .progress-info,
+  body.dark .status-pill {
+    color: rgba(255,255,255,0.78);
+  }
+  body.dark .summary-card .summary-title {
+    color: #d9e7ff;
+  }
+  body.dark .summary-card .summary-note {
+    color: rgba(255,255,255,0.65);
+  }
+  body.dark .summary-card .summary-value {
+    color: #f3f8ff;
+  }
+  body.dark .summary-card:hover {
+    background: #0b1930;
+  }
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 24px 40px;
+  }
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 34px 34px 28px;
+    background: linear-gradient(135deg, #1f58bc 0%, #3d7ceb 100%);
+    border-radius: 32px;
+    box-shadow: var(--shadow);
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    top: -80px;
+    right: -80px;
+    background: rgba(255,255,255,0.12);
+    filter: blur(16px);
+    pointer-events: none;
+  }
+  .hero-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .brand-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.14);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.18);
+  }
+  .brand-chip img {
+    width: 96px;
+    min-width: 96px;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.12);
+    padding: 16px;
+  }
+  .brand-chip span {
+    font-size: 1rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.96);
+    letter-spacing: 0.02em;
+  }
+  .theme-toggle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.24);
+    background: rgba(255,255,255,0.12);
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  }
+  .theme-toggle:hover {
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.22);
+    color: #0f2f60;
+  }
+  body.dark .theme-toggle {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.18);
+    color: #e7efff;
+  }
+  .hero-copy {
+    position: relative;
+    z-index: 1;
+  }
+  .hero h1 {
+    margin: 0 0 12px;
+    font-size: clamp(2.4rem, 4vw, 3.4rem);
+    line-height: 1.02;
+  }
+  .hero p {
+    margin: 0;
+    color: rgba(255,255,255,0.92);
+    max-width: 720px;
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+  .hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 20px;
+  }
+  .hero-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.18);
+    color: #f7fbff;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+  .hero-stat::before {
+    content: '•';
+    color: #8ec2ff;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin: 24px 0 0;
+  }
+  .summary-card {
+    padding: 10px 12px;
+    border-radius: 18px;
+    background: #ffffff;
+    border: 1px solid rgba(28, 78, 164, 0.08);
+    box-shadow: 0 8px 14px rgba(31, 88, 188, 0.05);
+    transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .summary-card:hover {
+    transform: translateY(-1px);
+    border-color: rgba(31, 88, 188, 0.12);
+    box-shadow: 0 10px 16px rgba(31, 88, 188, 0.08);
+    background: #fcfdff;
+  }
+  .summary-card-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .summary-card-icon {
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: rgba(31, 88, 188, 0.08);
+    color: #1f58bc;
+    font-size: 0.85rem;
+  }
+  .summary-card--green .summary-card-icon {
+    background: rgba(12, 143, 102, 0.08);
+    color: #0c7b55;
+  }
+  .summary-card--orange .summary-card-icon {
+    background: rgba(221, 118, 33, 0.08);
+    color: #c04b18;
+  }
+  .summary-card--purple .summary-card-icon {
+    background: rgba(108, 80, 255, 0.08);
+    color: #5a3bfd;
+  }
+  .summary-card .summary-title {
+    margin: 0;
+    font-size: 0.75rem;
+    color: #102240;
+    text-transform: none;
+    letter-spacing: normal;
+    font-weight: 600;
+  }
+  .summary-note {
+    margin: 4px 0 0;
+    color: #556b84;
+    font-size: 0.72rem;
+    line-height: 1.4;
+    max-width: 180px;
+  }
+  .summary-value {
+    margin: 10px 0 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #102240;
+  }
+  .summary-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .summary-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: none;
+  }
+  .summary-badge--live {
+    background: rgba(31, 88, 188, 0.12);
+    color: #1f58bc;
+  }
+  .summary-badge--success {
+    background: rgba(12, 143, 102, 0.12);
+    color: #0c7b55;
+  }
+  .summary-badge--warning {
+    background: rgba(221, 118, 33, 0.12);
+    color: #c04b18;
+  }
+  .summary-badge--info {
+    background: rgba(108, 80, 255, 0.12);
+    color: #5a3bfd;
+  }
+  .summary-subtitle {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+  .overview {
+    display: grid;
+    grid-template-columns: 1.15fr 0.95fr;
+    gap: 22px;
+    margin-top: 26px;
+    align-items: start;
+  }
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    padding: 26px;
+  }
+  .panel.new-scan-panel {
+    border-image: linear-gradient(135deg, rgba(31,88,188,0.24), rgba(61,124,235,0.18)) 1;
+    background: linear-gradient(180deg, rgba(246,251,255,0.98) 0%, rgba(232,240,255,0.93) 100%);
+    box-shadow: 0 28px 70px rgba(31, 88, 188, 0.08);
+    max-width: 620px;
+    min-width: 320px;
+    width: 90%;
+    overflow: hidden;
+  }
+  .panel.new-scan-panel .field-row {
+    width: 92.8%;
+    max-width: 100%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .panel.new-scan-panel .field-row:hover {
+    transform: translateY(-1px);
+    box-shadow: inset 0 0 0 1px rgba(31, 88, 188, 0.08);
+  }
+  .panel.new-scan-panel input,
+  .panel.new-scan-panel select,
+  .panel.new-scan-panel .button-primary {
+    width: 100%;
+  }
+  .panel-heading {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 22px;
+    padding: 22px 20px;
+    border-radius: 26px;
+    background: rgba(31, 88, 188, 0.08);
+    border: 1px solid rgba(31, 88, 188, 0.12);
+  }
+  .panel-heading-icon {
+    width: 60px;
+    height: 60px;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(31, 88, 188, 0.18), rgba(61, 124, 235, 0.25));
+    color: #1f58bc;
+    font-size: 1.5rem;
+    box-shadow: inset 0 2px 12px rgba(31, 88, 188, 0.14);
+  }
+  .panel-heading h2 {
+    margin: 0;
+    font-size: 1.45rem;
+    letter-spacing: -0.02em;
+    color: #1f58bc;
+  }
+  .panel-heading .hint {
+    margin: 6px 0 0;
+    color: var(--muted);
+    max-width: 540px;
+  }
+  .panel h2 {
+    margin: 0 0 8px;
+    font-size: 1.2rem;
+  }
+  .form-status {
+    margin: 0 0 18px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(31, 88, 188, 0.08);
+    color: #1e4c8f;
+    font-size: 0.94rem;
+    line-height: 1.55;
+  }
+  .field-row {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+  input, select {
+    width: 100%;
+    min-height: 54px;
+    padding: 0 18px;
+    border-radius: 20px;
+    border: 1px solid rgba(28, 78, 164, 0.14);
+    background: #fafbff;
+    font-size: 0.97rem;
+    color: var(--text);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  input:hover, select:hover {
+    border-color: rgba(31, 88, 188, 0.28);
+    box-shadow: 0 8px 20px rgba(31, 88, 188, 0.06);
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: rgba(31, 88, 188, 0.45);
+    box-shadow: 0 0 0 5px rgba(31, 88, 188, 0.08);
+    background: #ffffff;
+  }
+  .button-primary {
+    width: 100%;
+    min-height: 52px;
+    border: none;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #2463d8 0%, #1c4bb8 100%);
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 16px 32px rgba(31, 88, 188, 0.18);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  }
+  .button-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 18px 36px rgba(31, 88, 188, 0.24);
+    filter: saturate(1.05);
+  }
+  .button-primary:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  .button-primary:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  .report-list {
+    display: grid;
+    gap: 16px;
+  }
+  .pagination-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+  .pagination-info {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .pagination {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .pagination-btn {
+    min-width: 42px;
+    height: 42px;
+    padding: 0 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(28, 78, 164, 0.16);
+    background: #ffffff;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .pagination-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    border-color: rgba(31, 88, 188, 0.28);
+    box-shadow: 0 10px 24px rgba(31, 88, 188, 0.1);
+  }
+  .pagination-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  .pagination-btn.active {
+    background: rgba(31, 88, 188, 0.13);
+    border-color: rgba(31, 88, 188, 0.3);
+    color: #1f58bc;
+  }
+  body.dark .pagination-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.14);
+    color: #e7efff;
+  }
+  body.dark .pagination-btn.active {
+    background: rgba(255, 255, 255, 0.14);
+    color: #acd4ff;
+  }
+  .report-card {
+    border-radius: 28px;
+    border: none;
+    background: rgba(255, 255, 255, 0.96);
+    padding: 24px;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(31, 88, 188, 0.09);
+    backdrop-filter: blur(12px);
+  }
+  body.dark .report-card {
+    background: rgba(11, 21, 39, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 22px 56px rgba(0, 0, 0, 0.24);
+  }
+  .report-card::before {
+    content: '';
+    position: absolute;
+    top: -14px;
+    right: -18px;
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, rgba(31, 88, 188, 0.14), transparent 55%);
+    pointer-events: none;
+  }
+  body.dark .report-card::before {
+    background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 55%);
+  }
+  .report-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(31, 88, 188, 0.22);
+    box-shadow: 0 30px 70px rgba(31, 88, 188, 0.16);
+    background: rgba(255, 255, 255, 1);
+  }
+  body.dark .report-card:hover {
+    background: rgba(14, 24, 42, 0.96);
+  }
+  .report-card.collapsed {
+    padding: 18px 20px;
+  }
+  .report-head {
+    display: grid;
+    grid-template-columns: 1.1fr auto;
+    gap: 18px;
+    align-items: start;
+  }
+  .report-card.collapsed .report-head {
+    align-items: center;
+  }
+  .report-head-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .report-title {
+    margin: 0 0 8px;
+    font-size: 1.06rem;
+    font-weight: 800;
+  }
+  .report-card-label {
+    display: inline-flex;
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    background: rgba(31, 88, 188, 0.1);
+    color: #1f58bc;
+    font-weight: 800;
+  }
+  body.dark .report-card-label {
+    background: rgba(255,255,255,0.08);
+    color: #acd4ff;
+  }
+  .report-detail {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.65;
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(31, 88, 188, 0.08);
+    transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+    cursor: default;
+  }
+  .report-detail:hover {
+    background: rgba(31, 88, 188, 0.16);
+    transform: translateY(-1px);
+    color: #1f58bc;
+  }
+  body.dark .report-detail {
+    background: rgba(255,255,255,0.08);
+    color: #dbe7ff;
+  }
+  body.dark .report-detail:hover {
+    background: rgba(255,255,255,0.14);
+    color: #acd4ff;
+  }
+  .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 14px 0 12px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(31, 88, 188, 0.1);
+    color: var(--text);
+    font-size: 0.82rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .chip.running { background: rgba(31, 88, 188, 0.12); color: #1f58bc; }
+  .chip.success { background: rgba(12, 143, 102, 0.12); color: #0c7b55; }
+  .chip.critical { background: rgba(196, 46, 59, 0.12); color: #b42b3d; }
+  .chip.note { background: rgba(111, 113, 123, 0.12); color: var(--muted); }
+  body.dark .chip { background: rgba(255, 255, 255, 0.06); color: #e7efff; }
+  body.dark .chip.running { background: rgba(31, 88, 188, 0.18); color: #a9d0ff; }
+  body.dark .chip.success { background: rgba(12, 143, 102, 0.16); color: #b8ecd1; }
+  body.dark .chip.critical { background: rgba(196, 46, 59, 0.16); color: #ffb5b9; }
+  body.dark .chip.note { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.75); }
+  .report-meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .report-meta span {
+    display: block;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .report-meta span strong {
+    display: block;
+    color: var(--text);
+    margin-bottom: 4px;
+    font-size: 0.92rem;
+  }
+  .download-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+  .download-actions .download-btn {
+    min-width: 94px;
+    padding: 11px 16px;
+    font-size: 0.92rem;
+    border-radius: 16px;
+  }
+  .download-btn.excel::before,
+  .download-btn.pdf::before {
+    content: '';
+    display: inline-flex;
+    width: 14px;
+    height: 14px;
+    border-radius: 999px;
+    margin-right: 10px;
+    vertical-align: middle;
+    background: rgba(255,255,255,0.45);
+  }
+  .download-btn.excel::before { background: rgba(255,255,255,0.38); }
+  .download-btn.pdf::before { background: rgba(255,255,255,0.38); }
+  .download-btn.excel {
+    box-shadow: 0 10px 24px rgba(31, 88, 188, 0.15);
+  }
+  .download-btn.pdf {
+    box-shadow: 0 10px 24px rgba(180, 43, 61, 0.15);
+  }
+  .collapse-btn {
+    background: rgba(31, 88, 188, 0.1);
+    color: var(--accent);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+  }
+  .collapse-btn:hover {
+    background: rgba(31, 88, 188, 0.16);
+    transform: translateY(-1px);
+  }
+  .report-card.collapsed .collapse-btn {
+    color: #1f58bc;
+  }
+  .reports-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 20px;
+    padding: 18px 20px;
+    border-radius: 24px;
+    background: rgba(31, 88, 188, 0.05);
+    border: 1px solid rgba(31, 88, 188, 0.1);
+    flex-wrap: wrap;
+  }
+  .reports-header h2 {
+    margin: 0;
+    font-size: 1.35rem;
+    color: #1f58bc;
+  }
+  .reports-header .hint {
+    margin: 8px 0 0;
+    color: var(--muted);
+  }
+  .reports-header > div:first-child,
+  .reports-header > div:last-child {
+    flex: 1 1 420px;
+    min-width: 280px;
+  }
+  .search-group {
+    display: grid;
+    gap: 10px;
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+  }
+  .search-group label {
+    color: var(--muted);
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+  .search-group::before {
+    content: '\1F50D';
+    position: absolute;
+    left: 390px;
+    top: 42%;
+    transform: translateY(50%);
+    color: rgba(28, 78, 164, 0.45);
+    pointer-events: none;
+    font-size: 1rem;
+  }
+  .search-input {
+    width: 85%;
+    min-height: 52px;
+    padding: 0 18px 0 48px;
+    border-radius: 18px;
+    border: 1px solid rgba(28, 78, 164, 0.14);
+    background: #f7f9ff;
+    font-size: 0.96rem;
+    color: var(--text);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: inset 0 4px 12px rgba(31, 88, 188, 0.06);
+  }
+  .search-input:hover {
+    border-color: rgba(31, 88, 188, 0.28);
+    box-shadow: inset 0 6px 18px rgba(31, 88, 188, 0.08);
+  }
+  .search-input:focus {
+    outline: none;
+    border-color: rgba(31, 88, 188, 0.45);
+    box-shadow: 0 0 0 4px rgba(31, 88, 188, 0.08);
+    background: #ffffff;
+  }
+  body.dark .search-input {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.16);
+    color: #edf5ff;
+  }
+  body.dark .search-group::before {
+    color: rgba(255, 255, 255, 0.55);
+  }
+  body.dark .search-input:focus {
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08);
+  }
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 116px;
+    padding: 11px 18px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+  .status-pill::before {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    margin-right: 10px;
+    background: currentColor;
+  }
+  .state-running { color: #3a6fc1; background: rgba(31, 88, 188, 0.14); }
+  .state-success { color: #0c7b55; background: rgba(12, 143, 102, 0.12); }
+  .state-failed { color: #b42b3d; background: rgba(200, 47, 58, 0.12); }
+  body.dark .state-running { color: #1f58bc; background: rgba(50, 99, 175, 0.24); }
+  body.dark .state-success { color: #b8ecd1; background: rgba(15, 102, 63, 0.18); }
+  body.dark .state-failed { color: #ffb5b9; background: rgba(196, 46, 59, 0.16); }
+  body.dark .chip.running { background: rgba(50, 99, 175, 0.2); color: #d6e8ff; }
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+  .progress-info .progress-text {
+    font-weight: 700;
+    color: var(--text);
+    font-size: 0.95rem;
+  }
+  .progress-info .progress-state {
+    background: rgba(31, 88, 188, 0.1);
+    color: #1f58bc;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    animation: pulse-live 1.6s ease-in-out infinite;
+  }
+  .progress-panel {
+    margin: 0 0 18px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(31, 88, 188, 0.06) 0%, rgba(31, 88, 188, 0.03) 100%);
+    border: 1px solid rgba(31, 88, 188, 0.1);
+  }
+  .progress-task {
+    margin: 0 0 12px;
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+  .progress-task strong {
+    color: var(--text);
+  }
+  .progress-wrap {
+    position: relative;
+    width: 100%;
+    height: 28px;
+    background: rgba(31, 88, 188, 0.08);
+    border-radius: 999px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 6px rgba(31, 88, 188, 0.12);
+  }
+  .progress-bar {
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 100%;
+    min-width: 42px;
+    background: linear-gradient(90deg, #1f58bc 0%, #4d92ff 55%, #7eb6ff 100%);
+    transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    border-radius: 999px;
+    overflow: hidden;
+    box-shadow: 0 0 18px rgba(31, 88, 188, 0.28);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .progress-bar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.35) 50%, transparent 100%);
+    transform: translateX(-100%);
+    animation: progress-shimmer 1.8s ease-in-out infinite;
+  }
+  .progress-bar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.16) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.16) 50%, rgba(255,255,255,0.16) 75%, transparent 75%, transparent);
+    background-size: 24px 24px;
+    animation: progress-stripes 1.1s linear infinite;
+    opacity: 0.45;
+  }
+  .progress-percent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    min-width: 52px;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-align: center;
+    box-shadow: none;
+    white-space: nowrap;
+  }
+  .progress-bar[data-progress='100%'] {
+    background: linear-gradient(90deg, #0c8f66 0%, #2ab97f 100%);
+    box-shadow: 0 0 18px rgba(12, 143, 102, 0.24);
+  }
+  .progress-bar[data-progress='100%'] {
+    background: linear-gradient(90deg, #0c8f66 0%, #2ab97f 100%);
+    box-shadow: 0 0 18px rgba(12, 143, 102, 0.24);
+  }
+  .progress-percent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    min-width: 52px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: transparent;
+    color: #1f58bc;
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(31, 88, 188, 0.12);
+  }
+  body.dark .progress-percent {
+    background: rgba(255, 255, 255, 0.12);
+    color: #e7efff;
+    background: transparent;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.24);
+  }
+  @keyframes progress-stripes {
+    from { background-position: 0 0; }
+    to { background-position: 24px 24px; }
+  }
+  @keyframes progress-shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+  }
+  @keyframes pulse-live {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.72; }
+  }
+  .report-body {
+    display: grid;
+    gap: 14px;
+  }
+  .report-card.collapsed .report-body {
+    display: none;
+  }
+  .report-card.collapsed {
+    padding: 18px 20px;
+  }
+  .collapse-btn {
+    border: none;
+    background: rgba(31, 88, 188, 0.1);
+    color: var(--accent);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    font-size: 1.45rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+  }
+  .collapse-btn:hover {
+    background: rgba(31, 88, 188, 0.16);
+    transform: translateY(-1px);
+  }
+  .report-card.collapsed .collapse-btn {
+    color: #1f58bc;
+  }
+  .collapse-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(31, 88, 188, 0.16);
+  }
+  .report-note {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  .report-meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .report-meta span {
+    display: block;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .download-btn {
+    margin-top: 0;
+    min-width: 96px;
+    padding: 12px 18px;
+    border-radius: 16px;
+    border: none;
+    background: #1f58bc;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  }
+  .download-btn:hover:not(:disabled) { background: #2b69d1; transform: translateY(-1px); }
+  .download-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  .download-btn.excel { background: linear-gradient(135deg, #1f58bc 0%, #3d7ceb 100%); }
+  .download-btn.excel:hover { background: linear-gradient(135deg, #2655a9 0%, #2d63c8 100%); }
+  .download-btn.pdf { background: linear-gradient(135deg, #b42b3d 0%, #d14557 100%); }
+  .download-btn.pdf:hover { background: linear-gradient(135deg, #8f2336 0%, #b83949 100%); }
+  .download-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+  .empty {
+    padding: 36px 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.96rem;
+  }
+  .form-error {
+    display: none;
+    margin-bottom: 18px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: #fff2f2;
+    border: 1px solid rgba(200, 47, 58, 0.18);
+    color: #b42b3d;
+  }
+  @media (max-width: 960px) {
+    .overview { grid-template-columns: 1fr; }
+    .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 720px) {
+    .page { padding: 20px 16px 30px; }
+    .hero { grid-template-columns: 1fr; text-align: center; }
+    .hero img { margin: 0 auto; }
+    .report-head { grid-template-columns: 1fr; }
+    .report-meta { grid-template-columns: 1fr; }
+    .summary-grid { grid-template-columns: 1fr; }
+    .status-pill { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <section class="hero">
+    <div class="hero-top">
+      <div class="brand-chip">
+        <img src="./logo.svg" alt="Logo banner" />
+        <span>zaintech_war</span>
+      </div>
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+    </div>
+    <div class="hero-copy">
+      <h1>zaintech_war</h1>
+      <p>Run a lightweight, modern scan dashboard with live progress, report cards, and polished AWS findings overview.</p>
+      <div class="hero-stats">
+        <span class="hero-stat">Instant XLSX + PDF export</span>
+        <span class="hero-stat">Live scan progress</span>
+        <span class="hero-stat">Adaptive report cards</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="summary-grid" id="summaryGrid">
+    <div class="summary-card summary-card--blue">
+      <div class="summary-card-head">
+        <span class="summary-card-icon">⚡</span>
+        <div>
+          <p class="summary-title">Active scans</p>
+          <p class="summary-note">Live assessments currently in progress</p>
+        </div>
+      </div>
+      <p class="summary-value" id="activeScans">0</p>
+      <div class="summary-card-footer">
+        <span class="summary-badge summary-badge--live">Live</span>
+        <p class="summary-subtitle">Running scans in progress</p>
+      </div>
+    </div>
+    <div class="summary-card summary-card--green">
+      <div class="summary-card-head">
+        <span class="summary-card-icon">✅</span>
+        <div>
+          <p class="summary-title">Completed</p>
+          <p class="summary-note">Ready assessments you can review now</p>
+        </div>
+      </div>
+      <p class="summary-value" id="completedScans">0</p>
+      <div class="summary-card-footer">
+        <span class="summary-badge summary-badge--success">Ready</span>
+        <p class="summary-subtitle">Successful assessments ready</p>
+      </div>
+    </div>
+    <div class="summary-card summary-card--orange">
+      <div class="summary-card-head">
+        <span class="summary-card-icon">⚠️</span>
+        <div>
+          <p class="summary-title">Findings</p>
+          <p class="summary-note">Total issues across all scans</p>
+        </div>
+      </div>
+      <p class="summary-value" id="totalFindings">0</p>
+      <div class="summary-card-footer">
+        <span class="summary-badge summary-badge--warning">Critical insight</span>
+        <p class="summary-subtitle">Total issues discovered</p>
+      </div>
+    </div>
+    <div class="summary-card summary-card--purple">
+      <div class="summary-card-head">
+        <span class="summary-card-icon">⏱️</span>
+        <div>
+          <p class="summary-title">Latest update</p>
+          <p class="summary-note">Time since the last scan refresh</p>
+        </div>
+      </div>
+      <p class="summary-value" id="latestUpdate">Now</p>
+      <div class="summary-card-footer">
+        <span class="summary-badge summary-badge--info">Fresh</span>
+        <p class="summary-subtitle">Last scan refresh</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="overview">
+    <section class="panel new-scan-panel">
+      <div class="panel-heading">
+        <div class="panel-heading-icon">⚡</div>
+        <div>
+          <h2>New scan</h2>
+          <p class="hint">Enter AWS credentials and region to launch a new assessment. Live progress appears in the report cards instantly.</p>
+        </div>
+      </div>
+      <div class="form-status">This app uses the provided credentials only for the current scan session.</div>
+      <div id="formError" class="form-error"></div>
+      <div class="field-row">
+        <label for="accountName">Account name</label>
+        <input id="accountName" placeholder="prod-account" autocomplete="off" />
+      </div>
+      <div class="field-row">
+        <label for="accessKey">Access key ID</label>
+        <input id="accessKey" placeholder="AKIA..." autocomplete="off" />
+      </div>
+      <div class="field-row">
+        <label for="secretKey">Secret access key</label>
+        <input id="secretKey" type="password" placeholder="••••••••••••••••" autocomplete="off" />
+      </div>
+      <div class="field-row">
+        <label for="sessionToken">Session token <small>(optional)</small></label>
+        <input id="sessionToken" placeholder="Temporary credentials token" autocomplete="off" />
+      </div>
+      <div class="field-row">
+        <label for="region">Region</label>
+        <select id="region">
+          <option value="us-east-1">us-east-1</option>
+          <option value="us-east-2">us-east-2</option>
+          <option value="us-west-1">us-west-1</option>
+          <option value="us-west-2">us-west-2</option>
+          <option value="ca-central-1">ca-central-1</option>
+          <option value="eu-north-1">eu-north-1</option>
+          <option value="eu-west-1">eu-west-1</option>
+          <option value="eu-west-2">eu-west-2</option>
+          <option value="eu-west-3">eu-west-3</option>
+          <option value="eu-central-1">eu-central-1</option>
+          <option value="eu-south-1">eu-south-1</option>
+          <option value="me-south-1">me-south-1</option>
+          <option value="af-south-1">af-south-1</option>
+          <option value="ap-east-1">ap-east-1</option>
+          <option value="ap-south-1">ap-south-1</option>
+          <option value="ap-northeast-1">ap-northeast-1</option>
+          <option value="ap-northeast-2">ap-northeast-2</option>
+          <option value="ap-northeast-3">ap-northeast-3</option>
+          <option value="ap-southeast-1">ap-southeast-1</option>
+          <option value="ap-southeast-2">ap-southeast-2</option>
+          <option value="sa-east-1">sa-east-1</option>
+        </select>
+      </div>
+      <button id="runBtn" class="button-primary" onclick="startScan()">Run scan</button>
+      <div class="form-footer">
+        <p class="form-footer-text">Quick scan mode: results appear in the report cards instantly after start.</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="reports-header">
+        <div>
+          <h2>Reports</h2>
+          <p class="hint">The report cards below show live scan status, findings counts, progress, and download access.</p>
+        </div>
+        <div class="search-group">
+          <label for="reportSearch">Search reports</label>
+          <input id="reportSearch" class="search-input" placeholder="Search account, status, or task" autocomplete="off" />
+        </div>
+      </div>
+      <div id="reportList" class="report-list"></div>
+      <div id="reportPagination" class="pagination-container"></div>
+    </section>
+  </div>
+</div>
+
+<script>
+const formError = document.getElementById('formError');
+const activeScansCount = document.getElementById('activeScans');
+const completedScansCount = document.getElementById('completedScans');
+const totalFindingsValue = document.getElementById('totalFindings');
+const latestUpdateLabel = document.getElementById('latestUpdate');
+const runBtn = document.getElementById('runBtn');
+
+function formatAge(dateString) {
+  if (!dateString) return 'just now';
+  const diffMs = Date.now() - new Date(dateString + 'Z').getTime();
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  return `${Math.floor(hrs / 24)}d ago`;
+}
+
+function statusText(status) {
+  if (status === 'running') return 'Scanning';
+  if (status === 'success') return 'Ready';
+  if (status === 'failed') return 'Failed';
+  return status;
+}
+
+function statusClass(status) {
+  if (status === 'running') return 'state-running';
+  if (status === 'success') return 'state-success';
+  if (status === 'failed') return 'state-failed';
+  return '';
+}
+
+function createChip(label, variant = '') {
+  return `<span class="chip ${variant}">${label}</span>`;
+}
+
+function createMetaItem(label, value) {
+  return `<span><strong>${label}</strong><br>${value}</span>`;
+}
+const reportSearch = document.getElementById('reportSearch');
+let currentReportQuery = '';
+let currentReportPage = 1;
+const REPORTS_PER_PAGE = 5;
+const cardCollapseState = new Map();
+
+reportSearch.addEventListener('input', () => {
+  currentReportQuery = reportSearch.value.trim().toLowerCase();
+  currentReportPage = 1;
+  loadReports();
+});
+
+function goToPage(page) {
+  currentReportPage = Math.max(1, page);
+  loadReports();
+}
+
+function isCardCollapsed(scan) {
+  if (cardCollapseState.has(scan.id)) {
+    return cardCollapseState.get(scan.id);
+  }
+  return scan.status !== 'running';
+}
+
+function toggleCard(button) {
+  const card = button.closest('.report-card');
+  if (!card) return;
+  const scanId = Number(card.dataset.scanId);
+  const collapsed = card.classList.toggle('collapsed');
+  cardCollapseState.set(scanId, collapsed);
+  button.textContent = collapsed ? '+' : '-';
+  button.setAttribute('aria-expanded', String(!collapsed));
+}
+
+function updateSummary(scans) {
+  const running = scans.filter(s => s.status === 'running').length;
+  const completed = scans.filter(s => s.status === 'success').length;
+  const findings = scans.reduce((sum, scan) => sum + (scan.findings_count || 0), 0);
+  const latest = scans.sort((a, b) => new Date(b.finished_at || b.created_at) - new Date(a.finished_at || a.created_at))[0];
+
+  activeScansCount.textContent = running;
+  completedScansCount.textContent = completed;
+  totalFindingsValue.textContent = findings;
+  latestUpdateLabel.textContent = latest ? formatAge(latest.finished_at || latest.created_at) : 'No scans yet';
+}
+
+function buildProgressPanel(scan, rawProgress, progress, task) {
+  return `
+    <div class="progress-panel">
+      <div class="progress-info">
+        <span class="progress-text">Scan progress</span>
+        <span class="progress-state">Live</span>
+      </div>
+      <p class="progress-task"><strong>Current task:</strong> ${task || 'Preparing scan...'}</p>
+      <div class="progress-wrap">
+        <div class="progress-bar" data-progress="${rawProgress}%" style="width:${progress}%">
+          <span class="progress-percent">${rawProgress}%</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+function buildReportCard(scan) {
+  const rawProgress = scan.progress ?? 0;
+  const progress = scan.status === 'running' ? Math.max(rawProgress, 6) : rawProgress;
+  const status = scan.status;
+  const stateClass = statusClass(status);
+  const statusLabel = status === 'running' ? `Scanning ${rawProgress}%` : status === 'success' ? 'Ready' : 'Failed';
+  const task = scan.current_task || (status === 'running' ? 'Preparing scan...' : '');
+  const findingsLine = status === 'success'
+    ? `${scan.findings_count || 0} findings · ${scan.critical_count || 0} critical · ${scan.high_count || 0} high`
+    : `Started ${formatAge(scan.created_at)}`;
+  const notes = status === 'running'
+    ? `Live task: ${task}`
+    : status === 'failed'
+      ? scan.error || 'Scan failed during execution.'
+      : `Completed ${formatAge(scan.finished_at || scan.created_at)}`;
+  const hasPdf = Boolean(scan.pdf_path);
+  const collapsed = isCardCollapsed(scan);
+  const collapseIcon = collapsed ? '+' : '-';
+
+  return `
+    <article class="report-card ${stateClass} ${collapsed ? 'collapsed' : ''}" data-scan-id="${scan.id}">
+      <div class="report-head">
+        <div>
+          <div class="report-card-label">${scan.account_name}</div>
+          <p class="report-detail">${findingsLine}</p>
+        </div>
+        <div class="report-head-actions">
+          <span class="status-pill ${stateClass}">${statusLabel}</span>
+          <button class="collapse-btn" type="button" onclick="toggleCard(this)" aria-expanded="${!collapsed}" aria-label="${collapsed ? 'Expand' : 'Collapse'}">${collapseIcon}</button>
+        </div>
+      </div>
+
+      ${status === 'running' ? buildProgressPanel(scan, rawProgress, progress, task) : ''}
+
+      <div class="report-body">
+        <div class="chip-row">
+          ${createChip(`Progress ${rawProgress}%`, 'running')}
+          ${createChip(`Task: ${task ? task.slice(0, 28) : 'waiting...'}`, status === 'failed' ? 'critical' : status === 'success' ? 'success' : 'running')}
+          ${createChip(`Updated ${formatAge(scan.finished_at || scan.created_at)}`, '')}
+        </div>
+        <div class="report-meta">
+          ${createMetaItem('Last updated', formatAge(scan.finished_at || scan.created_at))}
+          ${createMetaItem('State', statusText(status))}
+        </div>
+        <p class="report-note">${notes}</p>
+        ${status === 'success' ? `
+          <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+            <button class="download-btn excel" type="button" onclick="window.location.href='/api/reports/${scan.id}/download'">XLSX</button>
+            <button class="download-btn pdf" type="button" ${hasPdf ? `onclick="window.location.href='/api/reports/${scan.id}/download/pdf'"` : 'disabled'}>PDF</button>
+            <button class="download-btn pdf" type="button" onclick="window.location.href='/api/reports/${scan.id}/download/services'">Svc List</button>
+          </div>` : ''}
+      </div>
+    </article>`;
+}
+
+async function startScan() {
+  formError.style.display = 'none';
+  const payload = {
+    account_name: document.getElementById('accountName').value.trim(),
+    access_key: document.getElementById('accessKey').value.trim(),
+    secret_key: document.getElementById('secretKey').value.trim(),
+    session_token: document.getElementById('sessionToken').value.trim() || null,
+    region: document.getElementById('region').value,
+  };
+  if (!payload.account_name || !payload.access_key || !payload.secret_key) {
+    formError.textContent = 'Account name, access key, and secret key are required.';
+    formError.style.display = 'block';
+    return;
+  }
+
+  runBtn.disabled = true;
+  runBtn.textContent = 'Starting scan...';
+  try {
+    const res = await fetch('/api/scan', {
+      method: 'POST',
+      cache: 'no-store',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw new Error(body.detail || 'Failed to start scan');
+    }
+    document.getElementById('secretKey').value = '';
+    await loadReports();
+  } catch (error) {
+    formError.textContent = error.message;
+    formError.style.display = 'block';
+  } finally {
+    runBtn.disabled = false;
+    runBtn.textContent = 'Run scan';
+  }
+}
+
+let refreshInterval = null;
+
+function scheduleRefresh() {
+  if (refreshInterval) return;
+  refreshInterval = setInterval(loadReports, 1000);
+}
+
+function stopRefresh() {
+  if (!refreshInterval) return;
+  clearInterval(refreshInterval);
+  refreshInterval = null;
+}
+
+async function loadReports() {
+  const list = document.getElementById('reportList');
+  try {
+    const url = `/api/reports?t=${Date.now()}`;
+    const scans = await (await fetch(url, { cache: 'no-store' })).json();
+    if (!scans || !scans.length) {
+      list.innerHTML = '<div class="empty">No scans yet. Start your first assessment to see live progress.</div>';
+      updateSummary([]);
+      stopRefresh();
+      return;
+    }
+    const filteredScans = scans.filter(scan => {
+      if (!currentReportQuery) return true;
+      const text = `${scan.account_name} ${scan.status} ${scan.current_task || ''} ${scan.error || ''}`.toLowerCase();
+      return text.includes(currentReportQuery);
+    });
+    updateSummary(scans);
+    const pageCount = Math.max(1, Math.ceil(filteredScans.length / REPORTS_PER_PAGE));
+    currentReportPage = Math.min(currentReportPage, pageCount);
+    const pagedScans = filteredScans.slice((currentReportPage - 1) * REPORTS_PER_PAGE, currentReportPage * REPORTS_PER_PAGE);
+
+    list.innerHTML = pagedScans.length
+      ? pagedScans.map(buildReportCard).join('')
+      : '<div class="empty">No reports match your search query.</div>';
+
+    renderPagination(filteredScans.length, pageCount);
+    const hasRunning = scans.some(scan => scan.status === 'running');
+    if (hasRunning) {
+      scheduleRefresh();
+    } else {
+      stopRefresh();
+    }
+  } catch (_) {
+    list.innerHTML = '<div class="empty">Unable to load reports. Please refresh the page.</div>';
+    document.getElementById('reportPagination').innerHTML = '';
+    stopRefresh();
+  }
+}
+
+function renderPagination(totalReports, pageCount) {
+  const container = document.getElementById('reportPagination');
+  if (!container || totalReports <= REPORTS_PER_PAGE) {
+    if (container) container.innerHTML = '';
+    return;
+  }
+
+  const start = (currentReportPage - 1) * REPORTS_PER_PAGE + 1;
+  const end = Math.min(totalReports, currentReportPage * REPORTS_PER_PAGE);
+  const pageButtons = [];
+
+  pageButtons.push(`<button class="pagination-btn" type="button" onclick="goToPage(${currentReportPage - 1})" ${currentReportPage === 1 ? 'disabled' : ''}>‹</button>`);
+  for (let i = 1; i <= pageCount; i += 1) {
+    pageButtons.push(`<button class="pagination-btn${i === currentReportPage ? ' active' : ''}" type="button" onclick="goToPage(${i})">${i}</button>`);
+  }
+  pageButtons.push(`<button class="pagination-btn" type="button" onclick="goToPage(${currentReportPage + 1})" ${currentReportPage === pageCount ? 'disabled' : ''}>›</button>`);
+
+  container.innerHTML = `
+    <div class="pagination-info">Showing ${start}-${end} of ${totalReports} reports</div>
+    <div class="pagination">${pageButtons.join('')}</div>
+  `;
+}
+
+const themeToggle = document.getElementById('themeToggle');
+
+function updateThemeButton() {
+  const isDark = document.body.classList.contains('dark');
+  themeToggle.textContent = isDark ? '☀' : '🌙';
+  themeToggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+}
+
+themeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+  updateThemeButton();
+  localStorage.setItem('uiTheme', document.body.classList.contains('dark') ? 'dark' : 'light');
+});
+
+const savedTheme = localStorage.getItem('uiTheme');
+if (savedTheme === 'light') {
+  document.body.classList.remove('dark');
+} else {
+  document.body.classList.add('dark');
+  if (savedTheme === null) {
+    localStorage.setItem('uiTheme', 'dark');
+  }
+}
+updateThemeButton();
+
+loadReports();
+</script>
+</body>
+</html>
