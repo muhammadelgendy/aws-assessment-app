@@ -15,6 +15,10 @@ build/
 dist/
 *.egg-info/
 
+# Generated app data
+app/reports/
+app/scans.db
+
 # Environment variables
 .env
 
